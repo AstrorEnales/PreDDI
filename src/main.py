@@ -5,6 +5,8 @@ import urllib.request
 import process_pmid_22647690
 import process_pmid_23520498
 import process_pmid_24158091
+import process_pmid_26196247
+import process_pmid_27354693
 import process_pmid_28056782
 
 
@@ -45,4 +47,6 @@ if __name__ == '__main__':
     process_pmid_22647690.process()
     process_pmid_23520498.process()
     process_pmid_24158091.process()
+    process_pmid_26196247.process()
+    process_pmid_27354693.process()
     process_pmid_28056782.process()
