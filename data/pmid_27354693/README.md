@@ -1,0 +1,1 @@
+Sridhar, D., Fakhraei, S., & Getoor, L. (2016). A probabilistic approach for collective similarity-based drug–drug interaction prediction. Bioinformatics, 32(20), 3175–3182. https://doi.org/10.1093/bioinformatics/btw342

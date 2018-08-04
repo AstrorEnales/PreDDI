@@ -1,0 +1,1 @@
+Iyer, S. V., Harpaz, R., LePendu, P., Bauer-Mehren, A., & Shah, N. H. (2014). Mining clinical text for signals of adverse drug-drug interactions. Journal of the American Medical Informatics Association, 21(2), 353–362. https://doi.org/10.1136/amiajnl-2013-001612

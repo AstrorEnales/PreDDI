@@ -1,0 +1,1 @@
+Zhang, P., Wang, F., Hu, J., & Sorrentino, R. (2015). Label Propagation Prediction of Drug-Drug Interactions Based on Clinical Side Effects. Scientific Reports, 5(1). https://doi.org/10.1038/srep12339

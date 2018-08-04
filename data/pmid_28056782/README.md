@@ -1,0 +1,1 @@
+Zhang, W., Chen, Y., Liu, F., Luo, F., Tian, G., & Li, X. (2017). Predicting potential drug-drug interactions by integrating chemical, biological, phenotypic and network data. BMC Bioinformatics, 18(1). https://doi.org/10.1186/s12859-016-1415-9

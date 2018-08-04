@@ -1,0 +1,11 @@
+.idea/
+data/*/*.xml
+data/*/*.zip
+data/*/*.txt
+data/*/*.tsv
+data/*/*.csv
+data/*/*.gz
+data/*/*.xls
+data/*/*.xlsx
+output/
+__pycache__

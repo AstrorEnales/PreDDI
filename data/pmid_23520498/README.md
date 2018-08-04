@@ -1,0 +1,1 @@
+Vilar, S., Uriarte, E., Santana, L., Tatonetti, N. P., & Friedman, C. (2013). Detection of Drug-Drug Interactions by Modeling Interaction Profile Fingerprints. PLoS ONE, 8(3), e58321. https://doi.org/10.1371/journal.pone.0058321

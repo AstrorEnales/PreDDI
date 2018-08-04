@@ -1,0 +1,1 @@
+Data extracted from [DrugBank](https://www.drugbank.ca) released under a [Creative Common's Attribution-NonCommercial 4.0 International License](http://creativecommons.org/licenses/by-nc/4.0/legalcode).

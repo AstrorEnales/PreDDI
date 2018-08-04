@@ -1,0 +1,1 @@
+Vilar, S., Harpaz, R., Uriarte, E., Santana, L., Rabadan, R., & Friedman, C. (2012). Drug—drug interaction through molecular structure similarity analysis. Journal of the American Medical Informatics Association, 19(6), 1066–1074. https://doi.org/10.1136/amiajnl-2012-000935
