@@ -62,14 +62,18 @@ def map_to_drugbank():
                 if id2 is not None:
                     matched_triples.append(output)
 
+    header = ['Number', 'DrugbankA', 'DrugbankC', 'DrugbankB', 'DrugA', 'DrugC: similar to DrugA', 'DrugB', 'TC',
+              'Effect drugC-drugB']
     with io.open('../data/pmid_23520498/journal.pone.0058321.s001_pairs.csv', 'w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=',', quotechar='"')
+        writer.writerow(header)
         for row in matched_pairs:
             writer.writerow(row)
 
     with io.open('../data/pmid_23520498/journal.pone.0058321.s001_triplets.csv', 'w', newline='',
                  encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=',', quotechar='"')
+        writer.writerow(header)
         for row in matched_triples:
             writer.writerow(row)
 

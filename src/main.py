@@ -2,6 +2,7 @@
 
 import os.path
 import urllib.request
+import process_pmid_22647690
 import process_pmid_23520498
 import process_pmid_28056782
 
@@ -40,5 +41,6 @@ def download_sources():
 
 if __name__ == '__main__':
     download_sources()
+    process_pmid_22647690.process()
     process_pmid_23520498.process()
     process_pmid_28056782.process()
