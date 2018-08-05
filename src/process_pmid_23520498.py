@@ -54,10 +54,11 @@ def map_to_drugbank():
                 # 7 - TC
                 # 8 - Effect drugC-drugB
                 output = [row[0], id1, id2, id3, row[1], row[2], row[3], row[4], row[5]]
-                if (id2, id3) in existing_pairs or (id3, id2) in existing_pairs:
+                id_key = utils.get_id_pair_id(id2, id3)
+                if id_key in existing_pairs:
                     duplicated += 1
                     continue
-                existing_pairs.add((id2, id3))
+                existing_pairs.add(id_key)
                 matched_pairs.append(output)
                 if id1 is not None:
                     matched_triples.append(output)
