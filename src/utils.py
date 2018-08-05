@@ -1,5 +1,40 @@
 #!/usr/bin/env python3
 
+import io
+import csv
+
+pubchem_drugbank_id_map = {}
+drugbank_name_id_map = {}
+drugbank_id_name_map = {}
+drugbank_product_name_id_map = {}
+
+
+def load_lookups():
+    with io.open('../data/DrugBank/drug links.csv', 'r', encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter=',', quotechar='"')
+        next(reader, None)
+        for row in reader:
+            if row[6] is not None and len(row[6]) > 0:
+                pubchem_drugbank_id_map[int(row[6])] = row[0]
+
+    with io.open('../data/DrugBank/id_name_map.csv', 'r', encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter=',', quotechar='"')
+        next(reader, None)
+        for row in reader:
+            drugbank_name_id_map[row[1].lower().strip()] = row[0].strip()
+
+    with io.open('../data/DrugBank/primary_id_name_map.csv', 'r', encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter=',', quotechar='"')
+        next(reader, None)
+        for row in reader:
+            drugbank_id_name_map[row[0].strip()] = row[1].lower().strip()
+
+    with io.open('../data/DrugBank/products_id_name_map.csv', 'r', encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter=',', quotechar='"')
+        next(reader, None)
+        for row in reader:
+            drugbank_product_name_id_map[row[1].lower().strip()] = row[0].strip()
+
 
 def manual_name_mapping(name: str) -> str or None:
     # Fixed with next DrugBank dump
@@ -50,20 +85,21 @@ def manual_name_mapping(name: str) -> str or None:
 
 
 def name_to_drugbank_id(name: str) -> str or None:
-    # name_lower = name.lower().replace('/', ' ')
-    # if name_lower in drugbank_name_id_map:
-    #     return drugbank_name_id_map[name_lower]
-    # if name_lower in drugbank_product_name_id_map:
-    #     return drugbank_product_name_id_map[name_lower]
+    name_lower = name.lower().replace('/', ' ')
+    if name_lower in drugbank_name_id_map:
+        return drugbank_name_id_map[name_lower]
+    if name_lower in drugbank_product_name_id_map:
+        return drugbank_product_name_id_map[name_lower]
     return manual_name_mapping(name)
 
 
 def drugbank_id_to_name(drugbank_id: str) -> str or None:
-    return None
+    return drugbank_id_name_map[drugbank_id] if drugbank_id in drugbank_id_name_map else None
 
 
 def pubchem_to_drugbank_id(pubchem_id: str) -> str or None:
-    return None
+    pubchem_id_int = int(pubchem_id[4::])
+    return pubchem_drugbank_id_map[pubchem_id_int] if pubchem_id_int in pubchem_drugbank_id_map else None
 
 
 def is_camel(s):

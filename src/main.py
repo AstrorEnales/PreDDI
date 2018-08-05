@@ -2,6 +2,8 @@
 
 import os.path
 import urllib.request
+import utils
+import drugbank
 import process_pmid_22647690
 import process_pmid_23520498
 import process_pmid_24158091
@@ -44,6 +46,8 @@ def download_sources():
 
 if __name__ == '__main__':
     download_sources()
+    drugbank.prepare()
+    utils.load_lookups()
     process_pmid_22647690.process()
     process_pmid_23520498.process()
     process_pmid_24158091.process()
