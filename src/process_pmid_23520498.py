@@ -77,7 +77,10 @@ def map_to_drugbank():
         for row in matched_triples:
             writer.writerow(row)
 
+    # Matched, Duplicated, Unmatched
+    return [len(matched_pairs), duplicated, total - duplicated - len(matched_pairs)]
 
-def process():
+
+def process() -> [int]:
     convert_to_csv()
-    map_to_drugbank()
+    return map_to_drugbank()

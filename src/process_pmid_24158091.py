@@ -6,9 +6,9 @@ import utils
 
 
 def map_to_drugbank():
-    matched = []
+    result = []
     total = 0
-    existing_pairs = set()
+    matched = set()
     duplicated = 0
 
     with io.open('../data/pmid_24158091/amiajnl-2013-001612-s3.csv', 'r', encoding='utf-8') as f:
@@ -33,11 +33,9 @@ def map_to_drugbank():
             id1 = utils.name_to_drugbank_id(row[1])
             id2 = utils.name_to_drugbank_id(row[2])
             if id1 is not None and id2 is not None:
-                if (id1, id2) in existing_pairs or (id2, id1) in existing_pairs:
-                    duplicated += 1
-                    continue
-                else:
-                    existing_pairs.add((id1, id2))
+                id_key = '%s:%s' % (id1 if id1 < id2 else id2, id2 if id1 < id2 else id1)
+                if id_key not in matched:
+                    matched.add(id_key)
                     #  0 - drugbank1
                     #  1 - drugbank2
                     #  2 - event
@@ -51,18 +49,23 @@ def map_to_drugbank():
                     # 10 - uor025
                     # 11 - label
                     # 12 - aor025
-                    matched.append(
+                    result.append(
                         [id1, id2, row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9],
                          row[10]])
+                else:
+                    duplicated += 1
 
     with io.open('../data/pmid_24158091/amiajnl-2013-001612-s3_matched.csv', 'w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=',', quotechar='"')
         writer.writerow(
             ['drugbank1', 'drugbank2', 'event', 'drug1', 'drug2', 'a', 'b', 'c', 'd', 'pop_event_rate', 'uor025',
              'label', 'aor025'])
-        for row in matched:
+        for row in result:
             writer.writerow(row)
 
+    # Matched, Duplicated, Unmatched
+    return [len(result), duplicated, total - duplicated - len(result)]
 
-def process():
-    map_to_drugbank()
+
+def process() -> [int]:
+    return map_to_drugbank()

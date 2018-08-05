@@ -16,7 +16,7 @@ def convert_to_csv():
 
 def deduplicate():
     result = []
-    existing_pairs = set()
+    matched = set()
     duplicated = 0
 
     with io.open('../data/pmid_28056782/12859_2016_1415_MOESM1_ESM.csv', 'r', encoding='utf-8') as f:
@@ -28,8 +28,11 @@ def deduplicate():
             # Skip unconfirmed
             if row[4] == 'False':
                 continue
-            if (row[0], row[1]) not in existing_pairs and (row[1], row[0]) not in existing_pairs:
-                existing_pairs.add((row[0], row[1]))
+            id1 = row[0]
+            id2 = row[1]
+            id_key = '%s:%s' % (id1 if id1 < id2 else id2, id2 if id1 < id2 else id1)
+            if id_key not in matched:
+                matched.add(id_key)
                 result.append(row[0:-1])
             else:
                 duplicated += 1
@@ -41,7 +44,10 @@ def deduplicate():
         for row in result:
             writer.writerow(row)
 
+    # Matched, Duplicated, Unmatched
+    return [len(result), duplicated, 0]
 
-def process():
+
+def process() -> [int]:
     convert_to_csv()
-    deduplicate()
+    return deduplicate()

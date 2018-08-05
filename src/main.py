@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os.path
+import tabulate
 import urllib.request
 import utils
 import drugbank
@@ -48,9 +49,14 @@ if __name__ == '__main__':
     download_sources()
     drugbank.prepare()
     utils.load_lookups()
-    process_pmid_22647690.process()
-    process_pmid_23520498.process()
-    process_pmid_24158091.process()
-    process_pmid_26196247.process()
-    process_pmid_27354693.process()
-    process_pmid_28056782.process()
+    stats = {
+        22647690: process_pmid_22647690.process(),
+        23520498: process_pmid_23520498.process(),
+        24158091: process_pmid_24158091.process(),
+        26196247: process_pmid_26196247.process(),
+        27354693: process_pmid_27354693.process(),
+        28056782: process_pmid_28056782.process()
+    }
+    pmid_link = '[%s](https://www.ncbi.nlm.nih.gov/pubmed/%s)'
+    print(tabulate.tabulate([[pmid_link % (key, key)] + stats[key] for key in sorted(stats.keys())],
+                            headers=['PMID', 'Matched', 'Duplicated', 'Unmatched'], numalign='right', tablefmt='pipe'))

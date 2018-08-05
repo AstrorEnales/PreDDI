@@ -44,6 +44,9 @@ def map_to_drugbank():
         for row in results:
             writer.writerow(row)
 
+    # Matched, Duplicated, Unmatched
+    return [len(results), duplicated, 0]
 
-def process():
-    map_to_drugbank()
+
+def process() -> [int]:
+    return map_to_drugbank()
