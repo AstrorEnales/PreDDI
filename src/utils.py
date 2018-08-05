@@ -7,6 +7,7 @@ pubchem_drugbank_id_map = {}
 drugbank_name_id_map = {}
 drugbank_id_name_map = {}
 drugbank_product_name_id_map = {}
+drugbank_interactions = set()
 
 
 def load_lookups():
@@ -34,6 +35,12 @@ def load_lookups():
         next(reader, None)
         for row in reader:
             drugbank_product_name_id_map[row[1].lower().strip()] = row[0].strip()
+
+    with io.open('../data/DrugBank/drug_drug_interactions.csv', 'r', encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter=',', quotechar='"')
+        next(reader, None)
+        for row in reader:
+            drugbank_interactions.add(get_id_pair_id(row[0], row[1]))
 
 
 def manual_name_mapping(name: str) -> str or None:
@@ -104,3 +111,11 @@ def pubchem_to_drugbank_id(pubchem_id: str) -> str or None:
 
 def is_camel(s):
     return s != s.lower() and s != s.upper()
+
+
+def get_id_pair_id(id1: str, id2: str) -> str:
+    return '%s:%s' % (id1 if id1 < id2 else id2, id2 if id1 < id2 else id1)
+
+
+def is_known_interaction(id1: str, id2: str) -> bool:
+    return get_id_pair_id(id1, id2) in drugbank_interactions

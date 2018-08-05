@@ -43,7 +43,7 @@ def map_to_drugbank():
             id1 = utils.name_to_drugbank_id(row[1])
             id2 = utils.name_to_drugbank_id(row[2])
             id3 = utils.name_to_drugbank_id(row[3])
-            if id1 is not None and id3 is not None:
+            if id2 is not None and id3 is not None:
                 # 0 - Number
                 # 1 - DrugbankA
                 # 2 - DrugbankC
@@ -54,12 +54,12 @@ def map_to_drugbank():
                 # 7 - TC
                 # 8 - Effect drugC-drugB
                 output = [row[0], id1, id2, id3, row[1], row[2], row[3], row[4], row[5]]
-                if (id1, id3) in existing_pairs or (id3, id1) in existing_pairs:
+                if (id2, id3) in existing_pairs or (id3, id2) in existing_pairs:
                     duplicated += 1
                     continue
-                existing_pairs.add((id1, id3))
+                existing_pairs.add((id2, id3))
                 matched_pairs.append(output)
-                if id2 is not None:
+                if id1 is not None:
                     matched_triples.append(output)
 
     header = ['Number', 'DrugbankA', 'DrugbankC', 'DrugbankB', 'DrugA', 'DrugC: similar to DrugA', 'DrugB', 'TC',
@@ -84,3 +84,13 @@ def map_to_drugbank():
 def process() -> [int]:
     convert_to_csv()
     return map_to_drugbank()
+
+
+def get_all_interaction_pairs() -> []:
+    result = []
+    with io.open('../data/pmid_23520498/journal.pone.0058321.s001_pairs.csv', 'r', encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter=',', quotechar='"')
+        next(reader, None)
+        for row in reader:
+            result.append([row[2], row[5], row[3], row[6], float(row[7])])
+    return result

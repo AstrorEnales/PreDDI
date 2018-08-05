@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+import io
+import csv
+import shutil
 import os.path
 import tabulate
 import urllib.request
@@ -46,17 +49,41 @@ def download_sources():
 
 
 if __name__ == '__main__':
+    # Cleanup previous export
+    if os.path.exists('../output/') and os.path.isdir('../output/'):
+        shutil.rmtree('../output/')
+    os.mkdir('../output/')
+
     download_sources()
     drugbank.prepare()
     utils.load_lookups()
-    stats = {
-        22647690: process_pmid_22647690.process(),
-        23520498: process_pmid_23520498.process(),
-        24158091: process_pmid_24158091.process(),
-        26196247: process_pmid_26196247.process(),
-        27354693: process_pmid_27354693.process(),
-        28056782: process_pmid_28056782.process()
+    modules = {
+        22647690: process_pmid_22647690,
+        23520498: process_pmid_23520498,
+        24158091: process_pmid_24158091,
+        26196247: process_pmid_26196247,
+        27354693: process_pmid_27354693,
+        28056782: process_pmid_28056782
     }
+    stats = {key: modules[key].process() for key in modules}
     pmid_link = '[%s](https://www.ncbi.nlm.nih.gov/pubmed/%s)'
     print(tabulate.tabulate([[pmid_link % (key, key)] + stats[key] for key in sorted(stats.keys())],
                             headers=['PMID', 'Matched', 'Duplicated', 'Unmatched'], numalign='right', tablefmt='pipe'))
+
+    master_table_lookup = {}
+    for key in modules:
+        for row in modules[key].get_all_interaction_pairs():
+            pair_id = utils.get_id_pair_id(row[0], row[2])
+            if pair_id not in master_table_lookup:
+                master_table_lookup[pair_id] = [row[0], row[1], row[2], row[3], {}]
+            master_table_lookup[pair_id][-1][key] = row[-1]
+    master_table = sorted([x for x in master_table_lookup.values()], key=lambda x: len(x[-1]), reverse=True)
+    pmid_keys = sorted(modules.keys())
+    with io.open('../output/master_table.csv', 'w',
+                 newline='', encoding='utf-8') as f:
+        writer = csv.writer(f, delimiter=',', quotechar='"')
+        writer.writerow(
+            ['drugbank_id1', 'drug_name1', 'drugbank_id2', 'drug_name2', 'is_known'] + [str(x) for x in pmid_keys])
+        for row in master_table:
+            writer.writerow(row[0:-1] + [1 if utils.is_known_interaction(row[0], row[2]) else 0] +
+                            [row[-1][key] if key in row[-1] else None for key in pmid_keys])

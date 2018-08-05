@@ -69,3 +69,13 @@ def map_to_drugbank():
 
 def process() -> [int]:
     return map_to_drugbank()
+
+
+def get_all_interaction_pairs() -> []:
+    result = []
+    with io.open('../data/pmid_24158091/amiajnl-2013-001612-s3_matched.csv', 'r', encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter=',', quotechar='"')
+        next(reader, None)
+        for row in reader:
+            result.append([row[0], row[3], row[1], row[4], 12])
+    return result

@@ -8,7 +8,7 @@
 | [24158091](https://www.ncbi.nlm.nih.gov/pubmed/24158091) | Mining clinical text for signals of adverse drug-drug interactions                                           | population event rate |
 | [26196247](https://www.ncbi.nlm.nih.gov/pubmed/26196247) | Label Propagation Prediction of Drug-Drug Interactions Based on Clinical Side Effects                        | Tanimoto coefficient  |
 | [27354693](https://www.ncbi.nlm.nih.gov/pubmed/27354693) | A probabilistic approach for collective similarity-based drug–drug interaction prediction                    | -                     |
-| [28056782](https://www.ncbi.nlm.nih.gov/pubmed/28056782) | Predicting potential drug-drug interactions by integrating chemical, biological, phenotypic and network data | (Jaccard index)       |
+| [28056782](https://www.ncbi.nlm.nih.gov/pubmed/28056782) | Predicting potential drug-drug interactions by integrating chemical, biological, phenotypic and network data | -                     |
 
 ## Pipeline
 

@@ -37,7 +37,7 @@ def deduplicate():
             else:
                 duplicated += 1
 
-    with io.open('../data/pmid_28056782/12859_2016_1415_MOESM1_ESM_unique_confirmed.csv', 'w', newline='',
+    with io.open('../data/pmid_28056782/12859_2016_1415_MOESM1_ESM_unique.csv', 'w', newline='',
                  encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=',', quotechar='"')
         writer.writerow(['Drug ID1', 'Drug ID2', 'Drug Name1', 'Drug Name2', 'Confirmed'])
@@ -51,3 +51,13 @@ def deduplicate():
 def process() -> [int]:
     convert_to_csv()
     return deduplicate()
+
+
+def get_all_interaction_pairs() -> []:
+    result = []
+    with io.open('../data/pmid_28056782/12859_2016_1415_MOESM1_ESM_unique.csv', 'r', encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter=',', quotechar='"')
+        next(reader, None)
+        for row in reader:
+            result.append([row[0], row[2], row[1], row[3], 1 if bool(row[4]) else 0])
+    return result

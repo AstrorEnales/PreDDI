@@ -7,13 +7,14 @@ import xml.etree.ElementTree as etree
 
 
 def prepare():
-    if os.path.exists('../data/DrugBank/primary_id_name_map.csv') and os.path.exists(
-            '../data/DrugBank/id_name_map.csv') and os.path.exists('../data/DrugBank/products_id_name_map.csv'):
+    if all([os.path.exists('../data/DrugBank/%s.csv' % file) for file in
+            ['primary_id_name_map', 'id_name_map', 'products_id_name_map', 'drug_drug_interactions']]):
         return
 
     drugs_id_map = {}
     products_id_map = {}
     primary_id_name_map = {}
+    drug_drug_interactions = set()
 
     ns = '{http://www.drugbank.ca}'
 
@@ -29,6 +30,13 @@ def prepare():
             drugbank_id = primary_ids[0].text if len(primary_ids) > 0 else ids[0].text
             if drugbank_id is None:
                 continue
+
+            interactions = elem.find(ns + 'drug-interactions')
+            if interactions is not None:
+                for interaction in interactions.findall(ns + 'drug-interaction'):
+                    id2 = interaction.find(ns + 'drugbank-id').text
+                    drug_drug_interactions.add(
+                        (drugbank_id if drugbank_id < id2 else id2, id2 if drugbank_id < id2 else drugbank_id))
 
             name_node = elem.find(ns + 'name')
             if name_node is not None and name_node.text is not None:
@@ -70,3 +78,9 @@ def prepare():
         for product_id in sorted(products_id_map.keys()):
             for name_node in sorted(products_id_map[product_id]):
                 writer.writerow([product_id, name_node])
+
+    with io.open('../data/DrugBank/drug_drug_interactions.csv', 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f, delimiter=',', quotechar='"')
+        writer.writerow(['id1', 'id2'])
+        for pair in drug_drug_interactions:
+            writer.writerow(pair)

@@ -97,3 +97,20 @@ def map_to_drugbank():
 def process() -> [int]:
     convert_to_csv()
     return map_to_drugbank()
+
+
+def get_all_interaction_pairs() -> []:
+    result = []
+    with io.open('../data/pmid_22647690/supp_amiajnl-2012-000935_amiajnl-2012-000935supp_table2_pairs.csv', 'r',
+                 encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter=',', quotechar='"')
+        next(reader, None)
+        for row in reader:
+            procedence = row[8].lower()
+            id_partner = row[1] if procedence == 'interaction-a' else (
+                row[2] if procedence == 'interaction-b' else None)
+            name_partner = row[4] if procedence == 'interaction-a' else (
+                row[5] if procedence == 'interaction-b' else None)
+            id3 = row[3]
+            result.append([id3, row[6], id_partner, name_partner, float(row[9])])
+    return result

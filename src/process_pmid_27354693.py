@@ -50,3 +50,13 @@ def map_to_drugbank():
 
 def process() -> [int]:
     return map_to_drugbank()
+
+
+def get_all_interaction_pairs() -> []:
+    result = []
+    with io.open('../data/pmid_27354693/interacts_positives_mapped.csv', 'r', encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter=',', quotechar='"')
+        next(reader, None)
+        for row in reader:
+            result.append(row + [-1])
+    return result
