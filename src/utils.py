@@ -58,5 +58,9 @@ def name_to_drugbank_id(name: str) -> str or None:
     return manual_name_mapping(name)
 
 
+def drugbank_id_to_name(drugbank_id: str) -> str or None:
+    return None
+
+
 def is_camel(s):
     return s != s.lower() and s != s.upper()
