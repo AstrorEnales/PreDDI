@@ -22,9 +22,9 @@
 ### Mapping of source data to DrugBank IDs
 | PMID                                                     |   Matched |   Duplicated |   Unmatched |
 |:---------------------------------------------------------|----------:|-------------:|------------:|
-| [22647690](https://www.ncbi.nlm.nih.gov/pubmed/22647690) |      8354 |         8372 |         370 |
-| [23520498](https://www.ncbi.nlm.nih.gov/pubmed/23520498) |     16986 |           12 |         238 |
+| [22647690](https://www.ncbi.nlm.nih.gov/pubmed/22647690) |      8367 |         8385 |         344 |
+| [23520498](https://www.ncbi.nlm.nih.gov/pubmed/23520498) |      3820 |        13286 |         130 |
 | [24158091](https://www.ncbi.nlm.nih.gov/pubmed/24158091) |      4885 |         1098 |           0 |
-| [26196247](https://www.ncbi.nlm.nih.gov/pubmed/26196247) |    118156 |         6778 |       20134 |
+| [26196247](https://www.ncbi.nlm.nih.gov/pubmed/26196247) |    118614 |         6861 |       19593 |
 | [27354693](https://www.ncbi.nlm.nih.gov/pubmed/27354693) |      1989 |         1989 |           0 |
 | [28056782](https://www.ncbi.nlm.nih.gov/pubmed/28056782) |      1000 |            0 |           0 |
