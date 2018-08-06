@@ -25,6 +25,7 @@ def map_to_drugbank():
     matched_pairs = []
     matched_triples = []
     existing_pairs = set()
+    unmapped_names = set()
     total = 0
     duplicated = 0
 
@@ -47,6 +48,12 @@ def map_to_drugbank():
             id1 = utils.name_to_drugbank_id(row[1])
             id2 = utils.name_to_drugbank_id(row[3])
             id3 = utils.name_to_drugbank_id(row[4])
+            if id1 is None:
+                unmapped_names.add(row[1])
+            if id2 is None:
+                unmapped_names.add(row[3])
+            if id3 is None:
+                unmapped_names.add(row[4])
             direction = row[7].lower()
             #  0 - number
             #  1 - Drugbank A
@@ -89,6 +96,11 @@ def map_to_drugbank():
         writer.writerow(header)
         for row in matched_triples:
             writer.writerow(row)
+
+    with io.open('../data/pmid_22647690/unmapped_names.csv', 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f, delimiter=',', quotechar='"')
+        for row in unmapped_names:
+            writer.writerow([row])
 
     # Matched, Duplicated, Unmatched
     return [len(matched_pairs), duplicated, total - duplicated - len(matched_pairs)]

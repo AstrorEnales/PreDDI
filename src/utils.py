@@ -97,7 +97,7 @@ def name_to_drugbank_id(name: str) -> str or None:
         return drugbank_name_id_map[name_lower]
     if name_lower in drugbank_product_name_id_map:
         return drugbank_product_name_id_map[name_lower]
-    return manual_name_mapping(name)
+    return manual_name_mapping(name_lower)
 
 
 def drugbank_id_to_name(drugbank_id: str) -> str or None:

@@ -7,6 +7,7 @@ import utils
 
 def map_to_drugbank():
     matched = set()
+    unmapped_names = set()
     results = []
     unmapped = 0
     duplicated = 0
@@ -23,6 +24,10 @@ def map_to_drugbank():
             id2 = utils.pubchem_to_drugbank_id(row[2])
             if id2 is None:
                 id2 = utils.name_to_drugbank_id(row[3])
+            if id1 is None:
+                unmapped_names.add(row[1])
+            if id2 is None:
+                unmapped_names.add(row[3])
             if id1 is None or id2 is None:
                 unmapped += 1
                 continue
@@ -38,6 +43,11 @@ def map_to_drugbank():
         writer.writerow(['Drug1_ID', 'DrugBank1', 'Drug1_Name', 'Drug2_ID', 'DrugBank2', 'Drug2_Name', 'Pred_Score'])
         for row in results:
             writer.writerow(row)
+
+    with io.open('../data/pmid_26196247/unmapped_names.csv', 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f, delimiter=',', quotechar='"')
+        for row in unmapped_names:
+            writer.writerow([row])
 
     # Matched, Duplicated, Unmatched
     return [len(results), duplicated, unmapped]
