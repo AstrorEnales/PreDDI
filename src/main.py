@@ -88,7 +88,10 @@ if __name__ == '__main__':
                     'kegg_id2': utils.drugbank_to_kegg_id(row[2]),
                     'rxcui2': None,
                     'drug_name2': row[3],
-                    'drugbank_known': 1 if utils.is_known_interaction(row[0], row[2]) else 0,
+                    'drugbank_known': utils.is_drugbank_known_interaction(row[0], row[2]),
+                    'kegg_known': utils.is_kegg_known_interaction(row[0], row[2]),
+                    'drugs_com_known': utils.is_drugs_com_known_interaction(row[0], row[2]),
+                    'unidrug_known': utils.is_unidrug_known_interaction(row[0], row[2]),
                     'sources': {}
                 }
             master_table_lookup[pair_id]['sources'][key] = row[-1]
@@ -102,7 +105,7 @@ if __name__ == '__main__':
     pmid_keys = sorted(modules.keys())
     header = ['drugbank_id1', 'kegg_id1', 'rxcui1', 'drug_name1',
               'drugbank_id2', 'kegg_id2', 'rxcui2', 'drug_name2',
-              'drugbank_known'] + \
+              'drugbank_known', 'kegg_known', 'drugs_com_known', 'unidrug_known'] + \
              [str(x) for x in pmid_keys]
     # All interactions
     with io.open('../output/master_table.csv', 'w', newline='', encoding='utf-8') as f:

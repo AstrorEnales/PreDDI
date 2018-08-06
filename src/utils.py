@@ -9,6 +9,9 @@ drugbank_name_id_map = {}
 drugbank_id_name_map = {}
 drugbank_product_name_id_map = {}
 drugbank_interactions = set()
+kegg_interactions = {}
+drugs_com_interactions = {}
+unidrug_interactions = {}
 
 
 def load_lookups():
@@ -44,6 +47,24 @@ def load_lookups():
         next(reader, None)
         for row in reader:
             drugbank_interactions.add(get_id_pair_id(row[0], row[1]))
+
+    with io.open('../data/kegg/drug_pairs.csv', 'r', encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter=',', quotechar='"')
+        next(reader, None)
+        for row in reader:
+            kegg_interactions[get_id_pair_id(row[0], row[1])] = row[2]
+
+    with io.open('../data/drugs_com/drug_pairs.csv', 'r', encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter=',', quotechar='"')
+        next(reader, None)
+        for row in reader:
+            drugs_com_interactions[get_id_pair_id(row[0], row[1])] = row[2]
+
+    with io.open('../data/UniDrug/drug_pairs.csv', 'r', encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter=',', quotechar='"')
+        next(reader, None)
+        for row in reader:
+            unidrug_interactions[get_id_pair_id(row[0], row[1])] = row[2]
 
 
 def manual_name_mapping(name: str) -> str or None:
@@ -124,5 +145,20 @@ def get_id_pair_id(id1: str, id2: str) -> str:
     return '%s:%s' % (id1 if id1 < id2 else id2, id2 if id1 < id2 else id1)
 
 
-def is_known_interaction(id1: str, id2: str) -> bool:
-    return get_id_pair_id(id1, id2) in drugbank_interactions
+def is_drugbank_known_interaction(id1: str, id2: str) -> int or None:
+    return 1 if get_id_pair_id(id1, id2) in drugbank_interactions else None
+
+
+def is_drugs_com_known_interaction(id1: str, id2: str) -> int or None:
+    id_key = get_id_pair_id(id1, id2)
+    return drugs_com_interactions[id_key] if id_key in drugs_com_interactions else None
+
+
+def is_kegg_known_interaction(id1: str, id2: str) -> int or None:
+    id_key = get_id_pair_id(id1, id2)
+    return kegg_interactions[id_key] if id_key in kegg_interactions else None
+
+
+def is_unidrug_known_interaction(id1: str, id2: str) -> int or None:
+    id_key = get_id_pair_id(id1, id2)
+    return unidrug_interactions[id_key] if id_key in unidrug_interactions else None
