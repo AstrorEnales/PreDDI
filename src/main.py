@@ -104,10 +104,19 @@ if __name__ == '__main__':
               'drugbank_id2', 'kegg_id2', 'rxcui2', 'drug_name2',
               'drugbank_known'] + \
              [str(x) for x in pmid_keys]
-    with io.open('../output/master_table.csv', 'w',
-                 newline='', encoding='utf-8') as f:
+    # All interactions
+    with io.open('../output/master_table.csv', 'w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=',', quotechar='"')
         writer.writerow(header)
         for row in master_table:
+            writer.writerow([row[key] for key in header if key in row] +
+                            [row['sources'][key] if key in row['sources'] else None for key in pmid_keys])
+    # Top overlap list
+    with io.open('../output/master_table_top_overlap.csv', 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f, delimiter=',', quotechar='"')
+        writer.writerow(header)
+        for row in master_table:
+            if len(row['sources']) < 3:
+                continue
             writer.writerow([row[key] for key in header if key in row] +
                             [row['sources'][key] if key in row['sources'] else None for key in pmid_keys])
