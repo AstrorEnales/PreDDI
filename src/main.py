@@ -123,3 +123,18 @@ if __name__ == '__main__':
                 continue
             writer.writerow([row[key] for key in header if key in row] +
                             [row['sources'][key] if key in row['sources'] else None for key in pmid_keys])
+    # Top overlap list candidates
+    with io.open('../output/master_table_top_overlap_candidates.csv', 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f, delimiter=',', quotechar='"')
+        writer.writerow(header)
+        for row in master_table:
+            if len(row['sources']) < 3:
+                continue
+            if row['drugbank_known'] is not None and row['drugbank_known'] != 0:
+                continue
+            if row['drugs_com_known'] is not None and row['drugs_com_known'] != '0':
+                continue
+            if row['kegg_known'] is not None and row['kegg_known'] != 0:
+                continue
+            writer.writerow([row[key] for key in header if key in row] +
+                            [row['sources'][key] if key in row['sources'] else None for key in pmid_keys])

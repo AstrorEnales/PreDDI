@@ -52,7 +52,7 @@ def load_lookups():
         reader = csv.reader(f, delimiter=',', quotechar='"')
         next(reader, None)
         for row in reader:
-            kegg_interactions[get_id_pair_id(row[0], row[1])] = row[2]
+            kegg_interactions[get_id_pair_id(row[0], row[1])] = int(row[2])
 
     with io.open('../data/drugs_com/drug_pairs.csv', 'r', encoding='utf-8') as f:
         reader = csv.reader(f, delimiter=',', quotechar='"')
@@ -64,7 +64,7 @@ def load_lookups():
         reader = csv.reader(f, delimiter=',', quotechar='"')
         next(reader, None)
         for row in reader:
-            unidrug_interactions[get_id_pair_id(row[0], row[1])] = row[2]
+            unidrug_interactions[get_id_pair_id(row[0], row[1])] = int(row[2])
 
 
 def manual_name_mapping(name: str) -> str or None:
