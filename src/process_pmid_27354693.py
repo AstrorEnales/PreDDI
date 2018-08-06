@@ -58,5 +58,5 @@ def get_all_interaction_pairs() -> []:
         reader = csv.reader(f, delimiter=',', quotechar='"')
         next(reader, None)
         for row in reader:
-            result.append(row + [-1])
+            result.append([row[0], row[2], row[1], row[3], -1])
     return result

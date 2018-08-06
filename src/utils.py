@@ -4,6 +4,7 @@ import io
 import csv
 
 pubchem_drugbank_id_map = {}
+drugbank_kegg_id_map = {}
 drugbank_name_id_map = {}
 drugbank_id_name_map = {}
 drugbank_product_name_id_map = {}
@@ -17,6 +18,8 @@ def load_lookups():
         for row in reader:
             if row[6] is not None and len(row[6]) > 0:
                 pubchem_drugbank_id_map[int(row[6])] = row[0]
+            if row[5] is not None and len(row[5]) > 0:
+                drugbank_kegg_id_map[row[0]] = row[5]
 
     with io.open('../data/DrugBank/id_name_map.csv', 'r', encoding='utf-8') as f:
         reader = csv.reader(f, delimiter=',', quotechar='"')
@@ -107,6 +110,10 @@ def drugbank_id_to_name(drugbank_id: str) -> str or None:
 def pubchem_to_drugbank_id(pubchem_id: str) -> str or None:
     pubchem_id_int = int(pubchem_id[4::])
     return pubchem_drugbank_id_map[pubchem_id_int] if pubchem_id_int in pubchem_drugbank_id_map else None
+
+
+def drugbank_to_kegg_id(drugbank_id: str) -> str or None:
+    return drugbank_kegg_id_map[drugbank_id] if drugbank_id in drugbank_kegg_id_map else None
 
 
 def is_camel(s):

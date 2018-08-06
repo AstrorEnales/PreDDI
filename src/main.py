@@ -6,6 +6,7 @@ import shutil
 import os.path
 import tabulate
 import urllib.request
+import nlm
 import utils
 import drugbank
 import process_pmid_22647690
@@ -70,20 +71,43 @@ if __name__ == '__main__':
     print(tabulate.tabulate([[pmid_link % (key, key)] + stats[key] for key in sorted(stats.keys())],
                             headers=['PMID', 'Matched', 'Duplicated', 'Unmatched'], numalign='right', tablefmt='pipe'))
 
+    mapped_drugbank_ids = set()
     master_table_lookup = {}
     for key in modules:
         for row in modules[key].get_all_interaction_pairs():
             pair_id = utils.get_id_pair_id(row[0], row[2])
             if pair_id not in master_table_lookup:
-                master_table_lookup[pair_id] = [row[0], row[1], row[2], row[3], {}]
-            master_table_lookup[pair_id][-1][key] = row[-1]
-    master_table = sorted([x for x in master_table_lookup.values()], key=lambda x: len(x[-1]), reverse=True)
+                mapped_drugbank_ids.add(row[0])
+                mapped_drugbank_ids.add(row[2])
+                master_table_lookup[pair_id] = {
+                    'drugbank_id1': row[0],
+                    'kegg_id1': utils.drugbank_to_kegg_id(row[0]),
+                    'drug_name1': row[1],
+                    'rxcui1': None,
+                    'drugbank_id2': row[2],
+                    'kegg_id2': utils.drugbank_to_kegg_id(row[2]),
+                    'rxcui2': None,
+                    'drug_name2': row[3],
+                    'drugbank_known': 1 if utils.is_known_interaction(row[0], row[2]) else 0,
+                    'sources': {}
+                }
+            master_table_lookup[pair_id]['sources'][key] = row[-1]
+
+    nlm.load_mapping_table(mapped_drugbank_ids)
+    for value in master_table_lookup.values():
+        value['rxcui1'] = nlm.drugbank_to_rxcui(value['drugbank_id1'])
+        value['rxcui2'] = nlm.drugbank_to_rxcui(value['drugbank_id2'])
+
+    master_table = sorted([x for x in master_table_lookup.values()], key=lambda x: len(x['sources']), reverse=True)
     pmid_keys = sorted(modules.keys())
+    header = ['drugbank_id1', 'kegg_id1', 'rxcui1', 'drug_name1',
+              'drugbank_id2', 'kegg_id2', 'rxcui2', 'drug_name2',
+              'drugbank_known'] + \
+             [str(x) for x in pmid_keys]
     with io.open('../output/master_table.csv', 'w',
                  newline='', encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=',', quotechar='"')
-        writer.writerow(
-            ['drugbank_id1', 'drug_name1', 'drugbank_id2', 'drug_name2', 'is_known'] + [str(x) for x in pmid_keys])
+        writer.writerow(header)
         for row in master_table:
-            writer.writerow(row[0:-1] + [1 if utils.is_known_interaction(row[0], row[2]) else 0] +
-                            [row[-1][key] if key in row[-1] else None for key in pmid_keys])
+            writer.writerow([row[key] for key in header if key in row] +
+                            [row['sources'][key] if key in row['sources'] else None for key in pmid_keys])
