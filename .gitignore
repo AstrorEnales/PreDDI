@@ -7,5 +7,9 @@ data/*/*.csv
 data/*/*.gz
 data/*/*.xls
 data/*/*.xlsx
+!data/UniDrug/*
+!data/kegg/*
+!data/nlm/*
+!data/drugs_com/*
 output/
 __pycache__
