@@ -11,5 +11,4 @@ data/*/*.xlsx
 !data/kegg/*
 !data/nlm/*
 !data/drugs_com/*
-output/
 __pycache__

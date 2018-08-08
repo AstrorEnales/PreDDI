@@ -2,8 +2,7 @@
 
 import io
 import csv
-import shutil
-import os.path
+import os
 import tabulate
 import nlm
 import utils
@@ -26,9 +25,9 @@ if __name__ == '__main__':
     }
 
     # Cleanup previous export
-    if os.path.exists('../output/') and os.path.isdir('../output/'):
-        shutil.rmtree('../output/')
-    os.mkdir('../output/')
+    os.remove('../output/master_table.csv')
+    os.remove('../output/master_table_top_overlap.csv')
+    os.remove('../output/master_table_top_overlap_candidates.csv')
 
     # Download all supplementary source data
     for key in modules:
