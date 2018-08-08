@@ -5,6 +5,16 @@ import csv
 import utils
 
 
+def download():
+    utils.download_file('https://bitbucket.org/linqs/psl-drug-interaction-prediction/raw/' +
+                        '35fbfd84e56e3cdb3248d376359dfa2b13ecb630/DrugBankIDs', '../data/pmid_27354693/DrugBankIDs.csv')
+    for i in range(1, 11):
+        utils.download_file('https://bitbucket.org/linqs/psl-drug-interaction-prediction/raw/' +
+                            '35fbfd84e56e3cdb3248d376359dfa2b13ecb630/data/all_dataset2/all/' +
+                            '%s/interacts_positives.csv' % i,
+                            '../data/pmid_27354693/%s_interacts_positives.csv' % i)
+
+
 def map_to_drugbank():
     total = 0
     matched = set()

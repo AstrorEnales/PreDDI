@@ -2,6 +2,8 @@
 
 import io
 import csv
+import os.path
+import urllib.request
 
 pubchem_drugbank_id_map = {}
 drugbank_kegg_id_map = {}
@@ -162,3 +164,10 @@ def is_kegg_known_interaction(id1: str, id2: str) -> int or None:
 def is_unidrug_known_interaction(id1: str, id2: str) -> int or None:
     id_key = get_id_pair_id(id1, id2)
     return unidrug_interactions[id_key] if id_key in unidrug_interactions else None
+
+
+def download_file(url, filepath):
+    if not os.path.exists(filepath):
+        print('File does not exist. Trying to download from "%s"...' % url)
+        with urllib.request.urlopen(url) as response, open(filepath, 'wb') as f:
+            f.write(response.read())

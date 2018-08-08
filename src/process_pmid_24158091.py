@@ -5,6 +5,11 @@ import csv
 import utils
 
 
+def download():
+    utils.download_file('https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3932451/bin/amiajnl-2013-001612-s3.csv',
+                        '../data/pmid_24158091/amiajnl-2013-001612-s3.csv')
+
+
 def map_to_drugbank():
     result = []
     total = 0

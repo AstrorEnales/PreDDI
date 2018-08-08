@@ -5,6 +5,10 @@ import csv
 import utils
 
 
+def download():
+    utils.download_file('http://astro.temple.edu/~tua87106/DDI_pred.csv', '../data/pmid_26196247/DDI_pred.csv')
+
+
 def map_to_drugbank():
     matched = set()
     unmapped_names = set()

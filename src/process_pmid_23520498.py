@@ -6,6 +6,11 @@ import openpyxl
 import utils
 
 
+def download():
+    utils.download_file('https://doi.org/10.1371/journal.pone.0058321.s001',
+                        '../data/pmid_23520498/journal.pone.0058321.s001.XLSX')
+
+
 def convert_to_csv():
     workbook = openpyxl.load_workbook('../data/pmid_23520498/journal.pone.0058321.s001.xlsx')
     sheet = workbook.get_active_sheet()

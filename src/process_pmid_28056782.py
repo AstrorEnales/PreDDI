@@ -3,6 +3,12 @@
 import io
 import csv
 import openpyxl
+import utils
+
+
+def download():
+    utils.download_file('https://static-content.springer.com/esm/art%3A10.1186%2Fs12859-016-1415-9/MediaObjects/' +
+                        '12859_2016_1415_MOESM1_ESM.xlsx', '../data/pmid_28056782/12859_2016_1415_MOESM1_ESM.xlsx')
 
 
 def convert_to_csv():
@@ -59,5 +65,6 @@ def get_all_interaction_pairs() -> []:
         reader = csv.reader(f, delimiter=',', quotechar='"')
         next(reader, None)
         for row in reader:
-            result.append([row[0], row[2], row[1], row[3], 1 if row[4] == 'True' else 0])
+            # Ignore confirmed value due to the fact we can check existence in DrugBank directly
+            result.append([row[0], row[2], row[1], row[3], -1])
     return result

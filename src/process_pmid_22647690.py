@@ -6,6 +6,12 @@ import xlrd
 import utils
 
 
+def download():
+    utils.download_file('https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3534468/bin/' +
+                        'supp_amiajnl-2012-000935_amiajnl-2012-000935supp_table2.xls',
+                        '../data/pmid_22647690/supp_amiajnl-2012-000935_amiajnl-2012-000935supp_table2.xls')
+
+
 def convert_to_csv():
     workbook = xlrd.open_workbook('../data/pmid_22647690/supp_amiajnl-2012-000935_amiajnl-2012-000935supp_table2.xls')
     sheet = workbook.sheet_by_index(0)
