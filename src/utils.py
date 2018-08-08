@@ -148,7 +148,7 @@ def get_id_pair_id(id1: str, id2: str) -> str:
 
 
 def is_drugbank_known_interaction(id1: str, id2: str) -> int or None:
-    return 1 if get_id_pair_id(id1, id2) in drugbank_interactions else None
+    return 1 if get_id_pair_id(id1, id2) in drugbank_interactions else 0
 
 
 def is_drugs_com_known_interaction(id1: str, id2: str) -> int or None:

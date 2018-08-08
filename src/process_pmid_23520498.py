@@ -55,7 +55,7 @@ def map_to_drugbank():
                 unmapped_names.add(row[2])
             if id3 is None and len(row[3]) > 0:
                 unmapped_names.add(row[3])
-            if id2 is not None and id3 is not None:
+            if id1 is not None and id3 is not None:
                 # 0 - Number
                 # 1 - DrugbankA
                 # 2 - DrugbankC
@@ -66,13 +66,13 @@ def map_to_drugbank():
                 # 7 - TC
                 # 8 - Effect drugC-drugB
                 output = [row[0], id1, id2, id3, row[1], row[2], row[3], row[4], row[5]]
-                id_key = utils.get_id_pair_id(id2, id3)
+                id_key = utils.get_id_pair_id(id1, id3)
                 if id_key in existing_pairs:
                     duplicated += 1
                     continue
                 existing_pairs.add(id_key)
                 matched_pairs.append(output)
-                if id1 is not None:
+                if id2 is not None:
                     matched_triples.append(output)
 
     header = ['Number', 'DrugbankA', 'DrugbankC', 'DrugbankB', 'DrugA', 'DrugC: similar to DrugA', 'DrugB', 'TC',
@@ -110,5 +110,5 @@ def get_all_interaction_pairs() -> []:
         reader = csv.reader(f, delimiter=',', quotechar='"')
         next(reader, None)
         for row in reader:
-            result.append([row[2], row[5], row[3], row[6], float(row[7])])
+            result.append([row[1], row[4], row[3], row[6], float(row[7])])
     return result
