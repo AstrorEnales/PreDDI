@@ -10,5 +10,6 @@ data/*/*.xlsx
 !data/UniDrug/*
 !data/kegg/*
 !data/nlm/*
+!data/DrugCentral/*
 !data/drugs_com/*
 __pycache__

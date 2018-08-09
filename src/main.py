@@ -66,8 +66,8 @@ if __name__ == '__main__':
 
     nlm.load_mapping_table(mapped_drugbank_ids)
     for value in master_table_lookup.values():
-        value['rxcui1'] = nlm.drugbank_to_rxcui(value['drugbank_id1'])
-        value['rxcui2'] = nlm.drugbank_to_rxcui(value['drugbank_id2'])
+        value['rxcui1'] = ';'.join(nlm.drugbank_to_rxcui(value['drugbank_id1']))
+        value['rxcui2'] = ';'.join(nlm.drugbank_to_rxcui(value['drugbank_id2']))
 
     master_table = sorted([x for x in master_table_lookup.values()], key=lambda x: len(x['sources']), reverse=True)
     pmid_keys = sorted(modules.keys())
