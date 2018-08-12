@@ -14,6 +14,7 @@ drugbank_interactions = set()
 kegg_interactions = {}
 drugs_com_interactions = {}
 unidrug_interactions = {}
+drugcentral_interactions = {}
 
 
 def load_lookups():
@@ -67,6 +68,12 @@ def load_lookups():
         next(reader, None)
         for row in reader:
             unidrug_interactions[get_id_pair_id(row[0], row[1])] = int(row[2])
+
+    with io.open('../data/DrugCentral/drug_interactions.csv', 'r', encoding='utf-8') as f:
+        reader = csv.reader(f, delimiter=',', quotechar='"')
+        next(reader, None)
+        for row in reader:
+            drugcentral_interactions[get_id_pair_id(row[0], row[1])] = row[2]
 
 
 def manual_name_mapping(name: str) -> str or None:
@@ -147,7 +154,11 @@ def get_id_pair_id(id1: str, id2: str) -> str:
     return '%s:%s' % (id1 if id1 < id2 else id2, id2 if id1 < id2 else id1)
 
 
-def is_drugbank_known_interaction(id1: str, id2: str) -> int or None:
+def get_id_pair_tuple(id1: str, id2: str) -> (str, str):
+    return id1 if id1 < id2 else id2, id2 if id1 < id2 else id1
+
+
+def is_drugbank_known_interaction(id1: str, id2: str) -> int:
     return 1 if get_id_pair_id(id1, id2) in drugbank_interactions else 0
 
 
@@ -164,6 +175,11 @@ def is_kegg_known_interaction(id1: str, id2: str) -> int or None:
 def is_unidrug_known_interaction(id1: str, id2: str) -> int or None:
     id_key = get_id_pair_id(id1, id2)
     return unidrug_interactions[id_key] if id_key in unidrug_interactions else None
+
+
+def is_drugcentral_known_interaction(id1: str, id2: str) -> str or None:
+    id_key = get_id_pair_id(id1, id2)
+    return drugcentral_interactions[id_key] if id_key in drugcentral_interactions else None
 
 
 def download_file(url, filepath):

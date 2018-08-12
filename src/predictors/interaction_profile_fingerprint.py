@@ -29,15 +29,9 @@ if __name__ == '__main__':
         m1[j][i] = 1
 
     print('Build Tanimoto-Coefficient matrix M2...')
-    counter = 0
-    last = 0
-    progress_factor = 100.0 / len(labels)
     for i in range(0, len(labels)):
-        progress = progress_factor * counter
-        if progress % 2 < last:
-            print(int(progress), '%')
-        counter += 1
-        last = progress % 2
+        if i % 10 == 0:
+            print(i, '/', len(labels))
         for j in range(0, len(labels)):
             if i != j:
                 tanimoto_sum = m1[i] + m1[j]
@@ -46,15 +40,9 @@ if __name__ == '__main__':
                 m2[i][j] = x / float(x + y) if x > 0 or y > 0 else 0
 
     print('Build DDI matrix M3 = M1 x M2...')
-    counter = 0
-    last = 0
-    progress_factor = 100.0 / len(labels)
     for i in range(0, len(labels)):
-        progress = progress_factor * counter
-        if progress % 2 < last:
-            print(int(progress), '%')
-        counter += 1
-        last = progress % 2
+        if i % 10 == 0:
+            print(i, '/', len(labels))
         for j in range(0, len(labels)):
             if i != j:
                 m3[i][j] = (m1[i] * m2[j]).max()
@@ -62,6 +50,8 @@ if __name__ == '__main__':
     result_interactions = []
     print('Adjust M3 symmetry...')
     for i in range(0, len(labels)):
+        if i % 10 == 0:
+            print(i, '/', len(labels))
         for j in range(i + 1, len(labels)):
             maximum = max(m3[i][j], m3[j][i])
             m3[i][j] = maximum

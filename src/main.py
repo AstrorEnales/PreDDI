@@ -25,9 +25,12 @@ if __name__ == '__main__':
     }
 
     # Cleanup previous export
-    os.remove('../output/master_table.csv')
-    os.remove('../output/master_table_top_overlap.csv')
-    os.remove('../output/master_table_top_overlap_candidates.csv')
+    if os.path.exists('../output/master_table.csv'):
+        os.remove('../output/master_table.csv')
+    if os.path.exists('../output/master_table_top_overlap.csv'):
+        os.remove('../output/master_table_top_overlap.csv')
+    if os.path.exists('../output/master_table_top_overlap_candidates.csv'):
+        os.remove('../output/master_table_top_overlap_candidates.csv')
 
     # Download all supplementary source data
     for key in modules:
@@ -60,20 +63,21 @@ if __name__ == '__main__':
                     'kegg_known': utils.is_kegg_known_interaction(row[0], row[2]),
                     'drugs_com_known': utils.is_drugs_com_known_interaction(row[0], row[2]),
                     'unidrug_known': utils.is_unidrug_known_interaction(row[0], row[2]),
+                    'drugcentral_known': utils.is_drugcentral_known_interaction(row[0], row[2]),
                     'sources': {}
                 }
             master_table_lookup[pair_id]['sources'][key] = row[-1]
 
     nlm.load_mapping_table(mapped_drugbank_ids)
     for value in master_table_lookup.values():
-        value['rxcui1'] = ';'.join(nlm.drugbank_to_rxcui(value['drugbank_id1']))
-        value['rxcui2'] = ';'.join(nlm.drugbank_to_rxcui(value['drugbank_id2']))
+        value['rxcui1'] = ';'.join(map(str, nlm.drugbank_to_rxcui(value['drugbank_id1'])))
+        value['rxcui2'] = ';'.join(map(str, nlm.drugbank_to_rxcui(value['drugbank_id2'])))
 
     master_table = sorted([x for x in master_table_lookup.values()], key=lambda x: len(x['sources']), reverse=True)
     pmid_keys = sorted(modules.keys())
     header = ['drugbank_id1', 'kegg_id1', 'rxcui1', 'drug_name1',
               'drugbank_id2', 'kegg_id2', 'rxcui2', 'drug_name2',
-              'drugbank_known', 'kegg_known', 'drugs_com_known', 'unidrug_known'] + \
+              'drugbank_known', 'drugcentral_known', 'kegg_known', 'drugs_com_known', 'unidrug_known'] + \
              [str(x) for x in pmid_keys]
     # All interactions
     with io.open('../output/master_table.csv', 'w', newline='', encoding='utf-8') as f:
@@ -99,6 +103,8 @@ if __name__ == '__main__':
             if len(row['sources']) < 3:
                 continue
             if row['drugbank_known'] is not None and row['drugbank_known'] != 0:
+                continue
+            if row['drugcentral_known'] is not None and len(row['drugcentral_known']) > 0:
                 continue
             if row['drugs_com_known'] is not None and row['drugs_com_known'] != '0':
                 continue
